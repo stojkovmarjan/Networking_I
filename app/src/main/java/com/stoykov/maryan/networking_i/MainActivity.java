@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 if (IsWiFiConnected()){
                     //ShowAlertDialog("CONNECTION","WiFi connection detected!");
 
-                    //startDownload();
+                    startDownload();
 
                 } else{
                    // ShowAlertDialog("CONNECTION","Mobile Data Connection detected!");
@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.show();
     }
 
+    void startDownload(){
+    //new DownloadRepoTask(params[0]);
+    new DownloadRepoTask().execute("https://api.github.com/repositories");
 
+    }
 
 }
