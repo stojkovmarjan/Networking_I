@@ -1,5 +1,6 @@
 package com.stoykov.maryan.networking_i;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
@@ -9,23 +10,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (IsNetworkConnected()){
-            ShowAlertDialog("CONNECTION","You are connected!");
+            //ShowAlertDialog("CONNECTION","You are connected!");
+            progressDialog=new ProgressDialog(this);
+            progressDialog.setMessage("Please wait...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+                if (IsWiFiConnected()){
+                    //ShowAlertDialog("CONNECTION","WiFi connection detected!");
+
+                    //startDownload();
+
+                } else{
+                   // ShowAlertDialog("CONNECTION","Mobile Data Connection detected!");
+                }
         } else {
             ShowAlertDialog("CONNECTION","You are not connected!");
         }
+
+
     }
 
-    boolean IsNetworkConnected(){
+    boolean IsNetworkConnected(){// network connection
         ConnectivityManager connectivityManager=(ConnectivityManager)
                                                     getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
         return ( networkInfo !=null && networkInfo.isConnected() );
+    }
+    boolean IsWiFiConnected(){// type of connection (wifi/mobile)
+        ConnectivityManager connectivityManager=(ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+        return ( networkInfo !=null &&(connectivityManager.TYPE_WIFI==networkInfo.getType())&& networkInfo.isConnected() );
     }
 
     void ShowAlertDialog(String titleMsg,String alertMsg){
@@ -40,4 +62,7 @@ public class MainActivity extends AppCompatActivity {
         });
         alertDialogBuilder.show();
     }
+
+
+
 }
